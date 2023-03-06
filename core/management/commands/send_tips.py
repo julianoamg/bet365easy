@@ -32,6 +32,7 @@ class Command(BaseCommand):
                 message = f"""🏟️ Jogo: {tip.game} 
 📊 Mercado: {tip.market}
 📌 Entrada: {tip.title} {tip.odd}
+💰 Unidades: {tip.units}
 {link}"""
                 bot = Bot(tip.bot.token)
                 try:
