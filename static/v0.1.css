@@ -89,7 +89,7 @@
 #bet365easy-sendtip-button {
     position: fixed;
     z-index: 999;
-    bottom: 150px;
+    bottom: 100px;
     right: 50px;
     box-shadow: inset 0px 1px 0px 0px #a4e271;
     background: linear-gradient(to bottom, # #078D72 5%, #078D72 100%);
@@ -101,10 +101,11 @@
     color: #ffffff;
     font-size: 15px;
     font-weight: bold;
-    padding: 2px;
+    padding: 5px;
     text-decoration: none;
     text-shadow: 0px 1px 0px #078D72;
     max-width: 150px;
+    height: 65px;
 }
 
 #bet365easy-sendtip-button input {

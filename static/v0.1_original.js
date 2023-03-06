@@ -47,7 +47,61 @@ function createSendTipButton() {
     const divButton = document.createElement('div');
     divButton.id = 'bet365easy-sendtip-button';
 
+    let initX, initY, firstX, firstY;
+
+    divButton.addEventListener('mousedown', function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+
+        initX = this.offsetLeft;
+        initY = this.offsetTop;
+        firstX = e.pageX;
+        firstY = e.pageY;
+
+        this.addEventListener('mousemove', dragIt, false);
+
+        window.addEventListener('mouseup', function () {
+            divButton.removeEventListener('mousemove', dragIt, false);
+        }, false);
+
+    }, false);
+
+    divButton.addEventListener('touchstart', function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+
+        initX = this.offsetLeft;
+        initY = this.offsetTop;
+        var touch = e.touches;
+        firstX = touch[0].pageX;
+        firstY = touch[0].pageY;
+
+        this.addEventListener('touchmove', swipeIt, false);
+
+        window.addEventListener('touchend', function (e) {
+            e.preventDefault();
+            object.removeEventListener('touchmove', swipeIt, false);
+        }, false);
+
+    }, false);
+
+    function dragIt(e) {
+        this.style.left = initX + e.pageX - firstX + 'px';
+        this.style.top = initY + e.pageY - firstY + 'px';
+    }
+
+    function swipeIt(e) {
+        var contact = e.touches;
+        this.style.left = initX + contact[0].pageX - firstX + 'px';
+        this.style.top = initY + contact[0].pageY - firstY + 'px';
+    }
+
     const input = document.createElement('input');
+
+    input.addEventListener('mousedown', e => {
+       e.stopPropagation();
+    });
+
     input.placeholder = 'Qtd unidades';
     input.type = 'number';
     input.value = localStorage.bet365easy_units || '';
