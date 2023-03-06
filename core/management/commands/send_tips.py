@@ -34,7 +34,11 @@ class Command(BaseCommand):
 📌 Entrada: {tip.title} {tip.odd}
 💰 Unidades: {tip.units}
 {link}"""
+                if not tip.bot:
+                    continue
+
                 bot = Bot(tip.bot.token)
+
                 try:
                     asyncio.run(send_message(bot, tip, message))
                 except BadRequest:
