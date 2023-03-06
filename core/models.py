@@ -54,7 +54,7 @@ class User(UUIDModel, TimeStampedModel, AbstractBaseUser, PermissionsMixin):
 class Bot(UUIDModel, TimeStampedModel):
     user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Cliente')
     token = models.CharField(max_length=255, verbose_name='BotFather Token')
-    dialog_id = models.IntegerField(verbose_name='ID do Grupo/Canal')
+    dialog_id = models.BigIntegerField(verbose_name='ID do Grupo/Canal')
     dialog_name = models.CharField(max_length=255, verbose_name='Nome do Grupo/Canal')
 
     def __str__(self):
