@@ -1,0 +1,109 @@
+#bet365easy-login {
+    top: 0;
+    padding-top: 20px;
+    box-sizing: border-box;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.8);
+    left: 0;
+    position: absolute;
+    width: 100%;
+    z-index: 999;
+}
+
+#bet365easy-login * {
+    font-family: 'Roboto', sans-serif;
+}
+
+#bet365easy-login h1 {
+    font-size: 20px;
+    color: #FFF;
+    margin: 0 0 10px;
+    position: absolute;
+    background-color: #fff;
+    top: -20px;
+    left: -20px;
+    padding: 10px;
+    border-bottom-right-radius: 5px;
+    border-top-left-radius: 5px;
+}
+
+#bet365easy-login > div {
+    width: 400px;
+    margin: 0 auto;
+    border-radius: 5px;
+    background: #222;
+    padding: 80px 30px 30px;
+    position: relative;
+}
+
+#bet365easy-login input {
+    color: #fff;
+    font-size: 16px;
+    padding: 10px;
+    border-radius: 0.2rem;
+    background-color: #000;
+    border: none;
+    width: 100%;
+    display: block;
+    border-bottom: 0.3rem solid transparent;
+    transition: all 0.3s;
+    margin-bottom: 10px;
+}
+
+#bet365easy-login button {
+    box-shadow: inset 0px 1px 0px 0px #a4e271;
+    background: linear-gradient(to bottom, # #078D72 5%, #078D72 100%);
+    background-color: #078D72;
+    border-radius: 6px;
+    border: 1px solid #078D72;
+    display: inline-block;
+    cursor: pointer;
+    color: #ffffff;
+    font-size: 15px;
+    font-weight: bold;
+    padding: 6px 24px;
+    text-decoration: none;
+    text-shadow: 0px 1px 0px #078D72;
+    width: 100%;
+    cursor: pointer;
+}
+
+#bet365easy-login form {
+    padding: 0;
+    margin: 0;
+}
+
+#bet365easy-error {
+    background-color: #9e2a2a;
+    color: #FFF;
+    font-size: 14px;
+    padding: 5px;
+    text-align: center;
+    width: 100%;
+    box-sizing: border-box;
+    margin-bottom: 10px;
+    display: none;
+    border-radius: 3px;
+}
+
+#bet365easy-sendtip-button {
+    position: fixed;
+    z-index: 999;
+    bottom: 20px;
+    right: 20px;
+    box-shadow: inset 0px 1px 0px 0px #a4e271;
+    background: linear-gradient(to bottom, # #078D72 5%, #078D72 100%);
+    background-color: #078D72;
+    border-radius: 6px;
+    border: 1px solid #078D72;
+    display: inline-block;
+    cursor: pointer;
+    color: #ffffff;
+    font-size: 15px;
+    font-weight: bold;
+    padding: 24px;
+    text-decoration: none;
+    text-shadow: 0px 1px 0px #078D72;
+    max-width: 150px;
+    cursor: pointer;
+}
