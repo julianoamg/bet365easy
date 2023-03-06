@@ -282,5 +282,5 @@ poetry.toml
 
 # ruff
 .ruff_cache/
-
+static/v0.1_original.js
 # End of https://www.toptal.com/developers/gitignore/api/python,pycharm
