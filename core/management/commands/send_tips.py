@@ -22,8 +22,7 @@ class Command(BaseCommand):
 
             for tip in tips:
                 try:
-                    bs = tip.bet.split('TP=BS', 1)[1].split('#', 1)[0].split('x', 0)[0]
-                    print(bs)
+                    bs = tip.bet.split('TP=BS', 1)[1].split('#', 1)[0].split('x', 1)[0]
                     odd = tip.bet.split('o=', 1)[1].split('#', 1)[0]
                 except IndexError:
                     tip.delete()
