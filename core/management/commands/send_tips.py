@@ -17,7 +17,7 @@ class Command(BaseCommand):
 
     def handle(self, **options):
         while True:
-            time.sleep(1)
+            time.sleep(0.1)
             tips = Tip.objects.filter(sent=False)
 
             for tip in tips:
