@@ -31,7 +31,7 @@ class Command(BaseCommand):
                 link = f'https://www.bet365.com/dl/sportsbookredirect?bet=1&bs={bs}~{odd}'
                 message = f"""🏟️ Jogo: {tip.game} 
 📊 Mercado: {tip.market}
-📌 Entrada: {tip.title} {tip.odd}
+📌 Entrada: {tip.title} @ {tip.odd}
 💰 Unidades: {tip.units}
 {link}"""
 
