@@ -13,6 +13,7 @@ django-cors-headers = "^3.14.0"
 selectolax = "^0.3.12"
 python-telegram-bot = "^20.1"
 django-extensions = "^3.2.1"
+django-environ = "^0.10.0"
 
 
 [build-system]
