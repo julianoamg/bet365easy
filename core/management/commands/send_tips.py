@@ -34,9 +34,6 @@ class Command(BaseCommand):
 📌 Entrada: {tip.title} {tip.odd}
 💰 Unidades: {tip.units}
 {link}"""
-                if not tip.bot:
-                    tip.delete()
-                    continue
 
                 bot = Bot(tip.bot.token)
 
