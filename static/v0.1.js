@@ -44,13 +44,38 @@ function createLoginBox() {
 }
 
 function createSendTipButton() {
+    const divButton = document.createElement('div');
+    divButton.id = 'bet365easy-sendtip-button';
+
+    const input = document.createElement('input');
+    input.placeholder = 'Qtd unidades';
+    input.type = 'number';
+    input.value = localStorage.bet365easy_units || '';
+    input.name = 'units';
+
     const button = document.createElement('button');
-    button.id = 'bet365easy-sendtip-button';
+    button.appendChild(input);
+    button.id = '';
     button.textContent = 'Enviar Tip';
     button.addEventListener('click', () => {
+        if (!parseFloat(input.value) > 0) {
+            alert('Por favor informe o número de únidades antes de enviar a tip.');
+            return;
+        }
+
+        const bodyHTML = document.body.innerHTML;
+
+        if (bodyHTML.includes('class="bss-StandardBetslip bss-StandardBetslip-hidden')) {
+            alert('A caderneta precisa estar aberta para enviar tips.');
+            return;
+        }
+
+        localStorage.bet365easy_units = input.value;
+
         const body = new FormData();
         body.append('innerHTML', document.body.innerHTML);
         body.append('betstring', sessionStorage.betstring);
+        body.append('units', input.value);
 
         fetch(BASE_URL + '/send-tip/?session_id=' + localStorage.bet365easy_sessionid, {
             method: 'POST',
@@ -64,7 +89,10 @@ function createSendTipButton() {
             }
         });
     });
-    document.body.append(button);
+
+    divButton.appendChild(input);
+    divButton.appendChild(button);
+    document.body.append(divButton);
 }
 
 fetch(BASE_URL + '/is-authenticated/?session_id=' + localStorage.bet365easy_sessionid).then(r => r.json()).then(data => {

@@ -82,6 +82,7 @@ class Tip(UUIDModel, TimeStampedModel):
     game = models.CharField(max_length=255, verbose_name='Jogo')
     bet = models.CharField(max_length=255, verbose_name='Caderneta BET365')
     sent = models.BooleanField(default=False, verbose_name='Enviado?')
+    units = models.FloatField(default=1, verbose_name='Unidades')
 
     class Meta:
         verbose_name = 'Tip'

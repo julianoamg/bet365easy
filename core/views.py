@@ -62,7 +62,8 @@ class SendTipView(View):
                 odd=odd.strip(),
                 market=market.strip(),
                 game=game.strip(),
-                bet=bet.strip()
+                bet=bet.strip(),
+                units=float(request.POST.get('units'))
             )
             return JsonResponse({'success': True})
         except (Session.DoesNotExist, ValidationError):
