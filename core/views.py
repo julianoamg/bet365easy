@@ -55,9 +55,14 @@ class SendTipView(View):
             market = parser.css_first('.bss-NormalBetItem_Details .bss-NormalBetItem_MarketContainer').text()
             game = parser.css_first('.bss-NormalBetItem_Details .bss-NormalBetItem_BottomSection').text()
 
+            bot = Bot.objects.filter(user=session.user).first()
+
+            if not bot:
+                return JsonResponse({'error': 'Nenhum bot associado a esta conta.'})
+
             Tip.objects.create(
                 user=session.user,
-                bot=Bot.objects.filter(user=session.user).first(),
+                bot=bot,
                 title=title.strip(),
                 odd=odd.strip(),
                 market=market.strip(),
@@ -67,4 +72,4 @@ class SendTipView(View):
             )
             return JsonResponse({'success': True})
         except (Session.DoesNotExist, ValidationError):
-            return JsonResponse({'error': True})
+            return JsonResponse({'error': 'Erro! Avise nosso suporte imediatamente.'})
