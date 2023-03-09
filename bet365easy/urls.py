@@ -7,5 +7,5 @@ urlpatterns = [
     path('login/', views.LoginView.as_view(), name='login'),
     path('is-authenticated/', views.IsAuthenticatedView.as_view(), name='is-authenticated'),
     path('send-tip/', views.SendTipView.as_view(), name='send-tip'),
-    path('admin', admin.site.urls),
+    path('09a88272-a76a-471a-a18e-f10894e62896', admin.site.urls),
 ]

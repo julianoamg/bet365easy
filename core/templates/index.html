@@ -8,6 +8,25 @@
     <title>BET365Easy</title>
 </head>
 <body>
-<a href="javascript:var script = document.createElement('script'); script.src = 'https://bet365easy.com/static/v0.1.js'; document.body.appendChild(script); var style = document.createElement('link'); style.rel = 'stylesheet'; style.href = 'https://bet365easy.com/static/v0.1.css'; document.head.appendChild(style);">Clique com o botão direito sobre este link e o adicione aos seus favoritos</a>
+<a href="javascript:var script = document.createElement('script'); script.src = 'https://bet365easy.com/static/v0.1.js'; document.body.appendChild(script); var style = document.createElement('link'); style.rel = 'stylesheet'; style.href = 'https://bet365easy.com/static/v0.1.css'; document.head.appendChild(style);">Clique
+    com o botão direito sobre este link e o adicione aos seus favoritos</a>
+<script>
+    function bookmark(title, url) {
+        if (window.sidebar) {
+            // Firefox
+            window.sidebar.addPanel(title, url, '');
+        } else if (window.opera && window.print) {
+            // Opera
+            var elem = document.createElement('a');
+            elem.setAttribute('href', url);
+            elem.setAttribute('title', title);
+            elem.setAttribute('rel', 'sidebar');
+            elem.click(); //this.title=document.title;
+        } else if (document.all) {
+            // ie
+            window.external.AddFavorite(url, title);
+        }
+    }
+</script>
 </body>
 </html>
