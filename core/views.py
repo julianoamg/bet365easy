@@ -1,6 +1,3 @@
-import random
-import string
-
 from django.contrib.auth import authenticate
 from django.core.exceptions import ValidationError
 from django.http import JsonResponse
@@ -28,7 +25,7 @@ class LoginView(View):
 
         if user is None:
             return JsonResponse(error_response)
-
+        Session.objects.filter(user=user).delete()
         session = Session.objects.create(user=user)
         return JsonResponse({'success': True, 'session_id': session.id})
 
