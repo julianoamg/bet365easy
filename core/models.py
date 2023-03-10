@@ -8,6 +8,9 @@ class Plan(UUIDModel, TimeStampedModel):
     name = models.CharField(max_length=100, verbose_name='Nome')
     period_in_days = models.IntegerField(default=0, verbose_name='Período em dias')
 
+    def __str__(self):
+        return f'{self.name} - {self.period_in_days} dias'
+
     class Meta:
         verbose_name = 'Plano'
         verbose_name_plural = 'Planos'
@@ -36,11 +39,15 @@ class CustomUserManager(BaseUserManager):
 
 
 class User(UUIDModel, TimeStampedModel, AbstractBaseUser, PermissionsMixin):
+    name = models.CharField(null=True, max_length=255, verbose_name='Nome')
+    telegram = models.CharField(null=True, max_length=100, verbose_name='Telegram')
+    whatsapp = models.CharField(null=True, blank=True, max_length=100, verbose_name='WhatsApp')
     plan = models.ForeignKey(Plan, null=True, on_delete=models.CASCADE, verbose_name='Plano')
+    payment_date = models.DateField(null=True, verbose_name='Data de Pagamento')
     email = models.EmailField(max_length=255, unique=True, verbose_name='E-mail')
     is_staff = models.BooleanField(default=False, verbose_name='É da equipe')
     is_superuser = models.BooleanField(default=False, verbose_name='É super usuário?')
-    is_active = models.BooleanField(default=False, verbose_name='Está ativo?')
+    is_active = models.BooleanField(default=True, verbose_name='Está ativo?')
 
     USERNAME_FIELD = 'email'
 
