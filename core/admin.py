@@ -21,18 +21,19 @@ class UserAdmin(UserAdmin):
             None,
             {
                 "classes": ("wide",),
-                "fields": ("email", "telegram", "plan", "payment_date", "password1", "password2"),
+                "fields": ("email", "telegram", "plan", "payment_date", "price", "password1", "password2"),
             },
         ),
     )
     fieldsets = (
         (None, {"fields": ("email", "password")}),
-        (_("Personal info"), {"fields": ("name", "telegram", "plan", "payment_date", "whatsapp",)})
+        (_("Personal info"), {"fields": ("name", "telegram", "plan", "price", "payment_date", "whatsapp",)})
     )
     list_display = [
         'email',
         'plan',
         'payment_date',
+        'price',
         'get_plan_expiry_date',
         'is_staff',
         'is_superuser',
@@ -84,6 +85,7 @@ class BotAdmin(admin.ModelAdmin):
     list_display = [
         'user',
         'token',
+        'members_qty',
         'dialog_id',
         'dialog_name',
     ]

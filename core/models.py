@@ -44,6 +44,7 @@ class User(UUIDModel, TimeStampedModel, AbstractBaseUser, PermissionsMixin):
     whatsapp = models.CharField(null=True, blank=True, max_length=100, verbose_name='WhatsApp')
     plan = models.ForeignKey(Plan, null=True, on_delete=models.CASCADE, verbose_name='Plano')
     payment_date = models.DateField(null=True, verbose_name='Data de Pagamento')
+    price = models.DecimalField(max_digits=20, default=0, decimal_places=2, verbose_name='Valor da Mensalidade')
     email = models.EmailField(max_length=255, unique=True, verbose_name='E-mail')
     is_staff = models.BooleanField(default=False, verbose_name='É da equipe')
     is_superuser = models.BooleanField(default=False, verbose_name='É super usuário?')
@@ -63,6 +64,7 @@ class Bot(UUIDModel, TimeStampedModel):
     token = models.CharField(max_length=255, verbose_name='BotFather Token')
     dialog_id = models.BigIntegerField(verbose_name='ID do Grupo/Canal')
     dialog_name = models.CharField(max_length=255, verbose_name='Nome do Grupo/Canal')
+    members_qty = models.IntegerField(default=0, editable=False, verbose_name='Quantidade de membros')
 
     def __str__(self):
         return self.dialog_name
