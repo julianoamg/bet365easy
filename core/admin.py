@@ -2,7 +2,6 @@ from datetime import timedelta
 
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-from django.db.models import Count
 from django.utils import timezone
 from django.utils.html import format_html
 from django.utils.translation import gettext_lazy as _
@@ -21,7 +20,7 @@ class UserAdmin(UserAdmin):
             None,
             {
                 "classes": ("wide",),
-                "fields": ("email", "telegram", "plan", "payment_date", "price", "password1", "password2"),
+                "fields": ("name", "email", "telegram", "plan", "payment_date", "price", "whatsapp", "password1", "password2"),
             },
         ),
     )
