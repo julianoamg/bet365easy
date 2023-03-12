@@ -77,7 +77,8 @@ TEMPLATES = [
 ]
 
 CORS_ALLOWED_ORIGINS = [
-    'https://www.bet365.com'
+    'https://www.bet365.com',
+    'https://br.betano.com'
 ]
 CORS_ALLOW_CREDENTIALS = True
 

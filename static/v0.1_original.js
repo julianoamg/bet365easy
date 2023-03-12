@@ -1,4 +1,4 @@
-const BASE_URL = 'https://bet365easy.com/'
+const BASE_URL = 'http://127.0.0.1:8000'
 
 function createLoginBox() {
     const div = document.createElement('div');
@@ -77,6 +77,7 @@ function createSendTipButton() {
         localStorage.bet365easy_units = input.value;
 
         const body = new FormData();
+        body.append('href', location.href);
         body.append('innerHTML', document.body.innerHTML);
         body.append('betstring', sessionStorage.betstring);
         body.append('units', input.value);

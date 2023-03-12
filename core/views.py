@@ -5,8 +5,9 @@ from django.utils.decorators import method_decorator
 from django.views import View
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import TemplateView
-from selectolax.parser import HTMLParser
 
+from core.crawlers.bet365 import create_bet365_tips
+from core.crawlers.betano import create_betano_tips
 from core.models import Session, Tip, Bot
 
 
@@ -20,11 +21,11 @@ class LoginView(View):
         email = request.POST.get('email')
         password = request.POST.get('password')
         error_response = {'error': 'Dados inválidos, verifique se os mesmos estão corretos!'}
-
         user = authenticate(username=email, password=password)
-
         if user is None:
             return JsonResponse(error_response)
+        if user.expire_in_days <= 0:
+            return JsonResponse({'error': 'Seu plano expirou, por favor entre em contato com nosso suporte, e faça sua renovação.'})
         Session.objects.filter(user=user).delete()
         session = Session.objects.create(user=user)
         return JsonResponse({'success': True, 'session_id': session.id})
@@ -34,7 +35,10 @@ class LoginView(View):
 class IsAuthenticatedView(View):
     def get(self, request):
         try:
-            Session.objects.get(id=request.GET.get('session_id'))
+            session = Session.objects.get(id=request.GET.get('session_id'))
+            if session.user.expire_in_days <= 0:
+                session.delete()
+                return JsonResponse({'error': True})
             return JsonResponse({'success': True})
         except (Session.DoesNotExist, ValidationError):
             return JsonResponse({'error': True})
@@ -45,28 +49,17 @@ class SendTipView(View):
     def post(self, request):
         try:
             session = Session.objects.get(id=request.GET.get('session_id'))
-            bet = request.POST.get('betstring')
-            parser = HTMLParser(request.POST.get('innerHTML'))
-            title = parser.css_first('.bss-NormalBetItem_Details .bss-NormalBetItem_Title').text()
-            odd = parser.css_first('.bss-NormalBetItem_Details .bss-NormalBetItem_OddsContainer').text()
-            market = parser.css_first('.bss-NormalBetItem_Details .bss-NormalBetItem_MarketContainer').text()
-            game = parser.css_first('.bss-NormalBetItem_Details .bss-NormalBetItem_BottomSection').text()
+            href = request.POST.get('href')
+            response = None
 
-            bot = Bot.objects.filter(user=session.user).first()
+            if 'bet365.com' in href:
+                response = create_bet365_tips(session, request)
+            if 'betano.com' in href:
+                response = create_betano_tips(session, request)
 
-            if not bot:
-                return JsonResponse({'error': 'Nenhum bot associado a esta conta.'})
+            if response:
+                return response
 
-            Tip.objects.create(
-                user=session.user,
-                bot=bot,
-                title=title.strip(),
-                odd=odd.strip(),
-                market=market.strip(),
-                game=game.strip(),
-                bet=bet.strip(),
-                units=float(request.POST.get('units'))
-            )
             return JsonResponse({'success': True})
-        except (Session.DoesNotExist, ValidationError):
+        except (Session.DoesNotExist, ValidationError, TypeError):
             return JsonResponse({'error': 'Erro! Avise nosso suporte imediatamente.'})

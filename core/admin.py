@@ -50,14 +50,11 @@ class UserAdmin(UserAdmin):
         if not o.plan or not o.payment_date:
             return 'N/D'
 
-        expire_date = o.payment_date + timedelta(days=o.plan.period_in_days)
-        expire_in_days = (expire_date - timezone.localtime().date()).days
-
-        if expire_in_days <= 5:
+        if o.expire_in_days <= 5:
             return format_html(f'''
-<span style="color: 000; background: yellow; font-weight: bold; display: inline-block; border-radius: 3px; padding: 5px 10px;">{expire_in_days} dias - ATENÇÃO!</span>
+<span style="color: 000; background: yellow; font-weight: bold; display: inline-block; border-radius: 3px; padding: 5px 10px;">{o.expire_in_days} dias - ATENÇÃO!</span>
             ''')
-        return f'{expire_in_days} dias'
+        return f'{o.expire_in_days} dias'
 
 
 @admin.register(models.Plan)
@@ -95,12 +92,16 @@ class TipAdmin(admin.ModelAdmin):
     list_display = [
         'user',
         'bot',
+        'house',
         'title',
         'odd',
         'market',
         'game',
         'bet',
         'sent',
+    ]
+    list_filter = [
+        'house'
     ]
 
     def has_add_permission(self, request):

@@ -1,5 +1,8 @@
+from datetime import timedelta
+
 from django.contrib.auth.base_user import AbstractBaseUser, BaseUserManager
 from django.contrib.auth.models import PermissionsMixin
+from django.utils import timezone
 from model_utils.models import UUIDModel, TimeStampedModel
 from django.db import models
 
@@ -54,6 +57,15 @@ class User(UUIDModel, TimeStampedModel, AbstractBaseUser, PermissionsMixin):
 
     objects = CustomUserManager()
 
+    @property
+    def expire_in_days(self):
+        if self.is_superuser:
+            return 1000
+        if not self.plan:
+            return 0
+        expire_date = self.payment_date + timedelta(days=self.plan.period_in_days)
+        return (expire_date - timezone.localtime().date()).days
+
     class Meta:
         verbose_name = 'Cliente'
         verbose_name_plural = 'Clientes'
@@ -83,15 +95,21 @@ class Session(UUIDModel):
 
 
 class Tip(UUIDModel, TimeStampedModel):
+    class House(models.TextChoices):
+        BET365 = 'BET365', 'BET365'
+        BETANO = 'BETANO', 'BETANO'
+
     user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Cliente')
     bot = models.ForeignKey(Bot, null=True, on_delete=models.CASCADE, verbose_name='Bot')
     title = models.CharField(max_length=255, verbose_name='Título')
     odd = models.CharField(max_length=255, verbose_name='Odd')
     market = models.CharField(max_length=255, verbose_name='Mercado')
     game = models.CharField(max_length=255, verbose_name='Jogo')
-    bet = models.CharField(max_length=255, verbose_name='Caderneta BET365')
+    bet = models.CharField(null=True, max_length=255, verbose_name='Caderneta BET365')
     sent = models.BooleanField(default=False, verbose_name='Enviado?')
     units = models.FloatField(default=1, verbose_name='Unidades')
+    link = models.URLField(null=True, verbose_name='Link')
+    house = models.CharField(null=True, max_length=100, choices=House.choices, verbose_name='House')
 
     class Meta:
         verbose_name = 'Tip'
