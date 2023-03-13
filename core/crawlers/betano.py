@@ -15,6 +15,9 @@ def create_betano_tips(session, request):
         odd = card.css_first('.bet-odds__value').text().strip()
         link = 'https://br.betano.com' + card.css_first('.selection-label').attributes['href']
 
+        if not game.strip():
+            game = card.css_first('.event-info').text().strip()
+
         Tip.objects.create(
             user=session.user,
             bot=bot,
