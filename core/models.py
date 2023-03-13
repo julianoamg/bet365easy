@@ -105,7 +105,7 @@ class Tip(UUIDModel, TimeStampedModel):
     odd = models.CharField(max_length=255, verbose_name='Odd')
     market = models.CharField(max_length=255, verbose_name='Mercado')
     game = models.CharField(max_length=255, verbose_name='Jogo')
-    bet = models.CharField(null=True, max_length=255, verbose_name='Caderneta BET365')
+    bet = models.CharField(null=True, max_length=1000, verbose_name='Caderneta BET365')
     sent = models.BooleanField(default=False, verbose_name='Enviado?')
     units = models.FloatField(default=1, verbose_name='Unidades')
     link = models.URLField(null=True, verbose_name='Link')
