@@ -3,13 +3,14 @@ import time
 
 from django.core.management import BaseCommand
 from telegram import Bot
+from telegram.constants import ParseMode
 from telegram.error import BadRequest
 
 from core.models import Tip
 
 
 async def send_message(bot, tip, message):
-    await bot.send_message(tip.bot.dialog_id, message, disable_web_page_preview=True)
+    await bot.send_message(tip.bot.dialog_id, message, disable_web_page_preview=True, parse_mode=ParseMode.MARKDOWN)
 
 
 def sanitize_message(message):
@@ -27,19 +28,48 @@ class Command(BaseCommand):
             time.sleep(0.5)
 
             tips = Tip.objects.filter(sent=False)
-            message = None
             cached_bet_strings = []
 
             for tip in tips:
-                similar_tips = None
-
                 if tip.bet in cached_bet_strings:
                     tip.sent = True
                     tip.save()
                     continue
 
+                cached_bet_strings.append(tip.bet)
+
+                message = []
+                similar_tips = Tip.objects.filter(bet=tip.bet, sent=False)
+                similar_count = similar_tips.count()
+
+                if similar_count > 1:
+                    message.append('⚠️ *Aposta Múltipla* ⚠️')
+                    message.append('')
+
+                for similar_tip in similar_tips:
+                    message.append(f"""
+                        🏟️ *Jogo:* {similar_tip.game} 
+                        📊 *Mercado:* {similar_tip.market}
+                        📌 *Entrada:* {similar_tip.title} @ {similar_tip.odd}
+                    """.strip())
+
+                    if similar_count > 1:
+                        message.append('---------------------------------------------------------------------------------------')
+
+                if similar_count > 1:
+                    message.append('')
+
+                message.append(f'🏠 *Casa:* {tip.get_house_display()}')
+
+                if similar_count > 1:
+                    message.append(f'📌 *Odd:* {tip.sum_odds}')
+
+                message.append(f'💰 *Unidades:* {tip.units}')
+
+                if similar_count > 1:
+                    message.append('')
+
                 if tip.house == Tip.House.BET365:
-                    cached_bet_strings.append(tip.bet)
                     parts = []
 
                     for bet_string in tip.bet.strip('||').split('||'):
@@ -50,32 +80,12 @@ class Command(BaseCommand):
                         except IndexError:
                             continue
 
-                    message = []
-                    similar_tips = Tip.objects.filter(bet=tip.bet, sent=False)
-
-                    for similar_tip in similar_tips:
-                        message.append(f"""
-                            💻️ Casa: {similar_tip.get_house_display()} 
-                            🏟️ Jogo: {similar_tip.game} 
-                            📊 Mercado: {similar_tip.market}
-                            📌 Entrada: {similar_tip.title} @ {tip.odd}
-                            💰 Unidades: {similar_tip.units}
-                        """.strip())
-
                     message.append(f'https://www.bet365.com/dl/sportsbookredirect?bet=1&bs=' + '|'.join(parts))
-                    message = '\n---------------------------------------------------------------------------------------\n'.join(message)
 
                 if tip.house == Tip.House.BETANO:
-                    link = tip.link
-                    message = sanitize_message(f"""
-                        🕹️️ Casa: {tip.get_house_display()}
-                        🏟️ Jogo: {tip.game} 
-                        📊 Mercado: {tip.market}
-                        📌 Entrada: {tip.title} @ {tip.odd}
-                        💰 Unidades: {tip.units}
-                        ---------------------------------------------------------------------------------------
-                        {link}
-                    """)
+                    message.append(tip.link)
+
+                message = '\n'.join(message)
 
                 bot = Bot(tip.bot.token)
 

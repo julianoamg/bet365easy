@@ -110,6 +110,7 @@ class Tip(UUIDModel, TimeStampedModel):
     units = models.FloatField(default=1, verbose_name='Unidades')
     link = models.URLField(null=True, verbose_name='Link')
     house = models.CharField(null=True, max_length=100, choices=House.choices, verbose_name='House')
+    sum_odds = models.FloatField(null=True, verbose_name='Soma Odds')
 
     class Meta:
         verbose_name = 'Tip'
