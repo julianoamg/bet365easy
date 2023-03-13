@@ -54,6 +54,8 @@ function createSendTipButton() {
 
     input.placeholder = 'Qtd unidades';
     input.type = 'number';
+    input.step = '0.5';
+    input.min = '0';
     input.value = localStorage.bet365easy_units || 1;
     input.name = 'units';
 
