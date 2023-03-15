@@ -111,6 +111,8 @@ class Tip(UUIDModel, TimeStampedModel):
     link = models.URLField(null=True, verbose_name='Link')
     house = models.CharField(null=True, max_length=100, choices=House.choices, verbose_name='House')
     sum_odds = models.FloatField(null=True, verbose_name='Soma Odds')
+    create_bet = models.BooleanField(default=False, verbose_name='É criar aposta?')
+    content = models.TextField(null=True)
 
     class Meta:
         verbose_name = 'Tip'

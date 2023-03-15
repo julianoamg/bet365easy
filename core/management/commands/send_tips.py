@@ -42,31 +42,44 @@ class Command(BaseCommand):
                 similar_tips = Tip.objects.filter(bet=tip.bet, sent=False)
                 similar_count = similar_tips.count()
 
+                if tip.create_bet:
+                    message.append('⚠️ *Criar Aposta* ⚠️')
+                    message.append('')
+
                 if similar_count > 1:
                     message.append('⚠️ *Aposta Múltipla* ⚠️')
                     message.append('')
 
-                for similar_tip in similar_tips:
-                    message.append(f"""
-                        🏟️ *Jogo:* {similar_tip.game} 
-                        📊 *Mercado:* {similar_tip.market}
-                        📌 *Entrada:* {similar_tip.title} @ {similar_tip.odd}
-                    """.strip())
+                if not tip.create_bet:
+                    for similar_tip in similar_tips:
+                        message.append(f"""
+                            🏟️ *Jogo:* {similar_tip.game} 
+                            📊 *Mercado:* {similar_tip.market}
+                            📌 *Entrada:* {similar_tip.title} @ {similar_tip.odd}
+                        """.strip())
 
-                    if similar_count > 1:
-                        message.append('---------------------------------------------------------------------------------------')
+                        if similar_count > 1:
+                            message.append('---------------------------------------------------------------------------------------')
 
-                if similar_count > 1:
+                if tip.create_bet:
+                    message.append(
+                        '---------------------------------------------------------------------------------------')
+                    for line in tip.content.splitlines():
+                        message.append(line)
+                    message.append(
+                        '---------------------------------------------------------------------------------------')
+
+                if similar_count > 1 or tip.create_bet:
                     message.append('')
 
                 message.append(f'🏠 *Casa:* {tip.get_house_display()}')
 
-                if similar_count > 1:
+                if (similar_count > 1 or tip.create_bet) and tip.sum_odds:
                     message.append(f'📌 *Odd:* {tip.sum_odds}')
 
                 message.append(f'💰 *Unidades:* {tip.units}')
 
-                if similar_count > 1:
+                if similar_count > 1 or tip.create_bet:
                     message.append('')
 
                 if tip.house == Tip.House.BET365:
@@ -85,7 +98,10 @@ class Command(BaseCommand):
                     except (IndexError, AttributeError):
                         anchor = ''
 
-                    message.append(f'https://www.bet365.com/dl/sportsbookredirect?bet=1&bs=' + '|'.join(parts) + anchor)
+                    if tip.create_bet:
+                        message.append(tip.link)
+                    else:
+                        message.append(f'https://www.bet365.com/dl/sportsbookredirect?bet=1&bs=' + '|'.join(parts) + anchor)
 
                 if tip.house == Tip.House.BETANO:
                     message.append(tip.link)

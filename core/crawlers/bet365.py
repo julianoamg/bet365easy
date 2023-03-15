@@ -12,6 +12,45 @@ def create_bet365_tips(session, request):
     if not bot:
         return JsonResponse({'error': 'Nenhum bot associado a esta conta.'})
 
+    if 'class="bss-BetBuilderBetItem' in request.POST.get('innerHTML'):
+        title = parser.css_first('.bss-BetBuilderBetItem_FixtureDescription').text().strip()
+        message_items = parser.css_first('.bss-BetBuilderBetItem_ParticipantContainerWrapper').text(separator='\n').strip().splitlines()
+        sum_odds = float(parser.css_first('.bss-BetBuilderBetItem_Odds.bs-OddsLabel').text().strip())
+        game = title
+        odd = sum_odds
+        market = title
+        new_message = []
+        skip = False
+
+        for message_item in message_items:
+            if skip:
+                skip = False
+                continue
+
+            if message_item.lower() not in [
+                'pagamento antecipado'
+            ]:
+                new_message.append(f'📌 Entrada: {message_item.strip()}')
+                skip = True
+
+        content = '\n'.join(new_message)
+
+        Tip.objects.create(
+            user=session.user,
+            bot=bot,
+            title=title,
+            odd=odd,
+            market=market,
+            game=game,
+            bet=bet,
+            link=request.POST.get('href'),
+            units=float(request.POST.get('units')),
+            house=Tip.House.BET365,
+            sum_odds=sum_odds,
+            create_bet=True,
+            content=content
+        )
+
     for normal_bet in parser.css('.bss-NormalBetItem'):
         title = normal_bet.css_first('.bss-NormalBetItem_Details .bss-NormalBetItem_Title').text().strip()
         odd = normal_bet.css_first('.bss-NormalBetItem_Details .bss-NormalBetItem_OddsContainer').text().strip()
