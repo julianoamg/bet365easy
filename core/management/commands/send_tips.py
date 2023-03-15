@@ -80,7 +80,12 @@ class Command(BaseCommand):
                         except IndexError:
                             continue
 
-                    message.append(f'https://www.bet365.com/dl/sportsbookredirect?bet=1&bs=' + '|'.join(parts))
+                    try:
+                        anchor = '#' + tip.link.split('#')[1]
+                    except IndexError:
+                        anchor = ''
+
+                    message.append(f'https://www.bet365.com/dl/sportsbookredirect?bet=1&bs=' + '|'.join(parts) + anchor)
 
                 if tip.house == Tip.House.BETANO:
                     message.append(tip.link)
