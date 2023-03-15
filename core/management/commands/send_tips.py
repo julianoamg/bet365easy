@@ -82,7 +82,7 @@ class Command(BaseCommand):
 
                     try:
                         anchor = '#' + tip.link.split('#')[1]
-                    except IndexError:
+                    except (IndexError, AttributeError):
                         anchor = ''
 
                     message.append(f'https://www.bet365.com/dl/sportsbookredirect?bet=1&bs=' + '|'.join(parts) + anchor)
