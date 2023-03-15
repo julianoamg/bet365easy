@@ -17,27 +17,15 @@ def create_bet365_tips(session, request):
         message_items = []
 
         for sentence in parser.css('.bss-BetBuilderParticipant_Sentence'):
-            message_items.append(sentence.text())
+            message_items.append('📌 Entrada: ' + sentence.text())
 
         sum_odds = float(parser.css_first('.bss-BetBuilderBetItem_Odds.bs-OddsLabel').text().strip())
         game = title
         odd = sum_odds
         market = title
         new_message = []
-        skip = False
 
-        for message_item in message_items:
-            if skip:
-                skip = False
-                continue
-
-            if message_item.lower() not in [
-                'pagamento antecipado'
-            ]:
-                new_message.append(f'📌 Entrada: {message_item.strip()}')
-                skip = True
-
-        content = '\n'.join(new_message)
+        content = '\n'.join(message_items)
 
         Tip.objects.create(
             user=session.user,
