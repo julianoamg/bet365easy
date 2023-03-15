@@ -14,7 +14,11 @@ def create_bet365_tips(session, request):
 
     if 'class="bss-BetBuilderBetItem' in request.POST.get('innerHTML'):
         title = parser.css_first('.bss-BetBuilderBetItem_FixtureDescription').text().strip()
-        message_items = parser.css_first('.bss-BetBuilderBetItem_ParticipantContainerWrapper').text(separator='\n').strip().splitlines()
+        message_items = []
+
+        for sentence in parser.css('.bss-BetBuilderParticipant_Sentence'):
+            message_items.append(sentence.text())
+
         sum_odds = float(parser.css_first('.bss-BetBuilderBetItem_Odds.bs-OddsLabel').text().strip())
         game = title
         odd = sum_odds
