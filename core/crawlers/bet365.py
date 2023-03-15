@@ -30,6 +30,7 @@ def create_bet365_tips(session, request):
             market=market,
             game=game,
             bet=bet,
+            link=request.POST.get('href'),
             units=float(request.POST.get('units')),
             house=Tip.House.BET365,
             sum_odds=sum_odds
