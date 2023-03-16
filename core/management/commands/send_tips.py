@@ -25,7 +25,7 @@ class Command(BaseCommand):
 
     def handle(self, **options):
         while True:
-            time.sleep(0.5)
+            time.sleep(0.01)
 
             tips = Tip.objects.filter(sent=False)
             cached_bet_strings = []
