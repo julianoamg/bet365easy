@@ -89,12 +89,7 @@ class TipAdmin(admin.ModelAdmin):
         'user',
         'bot',
         'house',
-        'title',
-        'odd',
-        'market',
-        'game',
         'bet',
-        'sent',
     ]
     list_filter = [
         'house'

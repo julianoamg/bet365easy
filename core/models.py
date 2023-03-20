@@ -101,18 +101,12 @@ class Tip(UUIDModel, TimeStampedModel):
 
     user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Cliente')
     bot = models.ForeignKey(Bot, null=True, on_delete=models.CASCADE, verbose_name='Bot')
-    title = models.CharField(max_length=255, verbose_name='Título')
-    odd = models.CharField(max_length=255, verbose_name='Odd')
-    market = models.CharField(max_length=255, verbose_name='Mercado')
-    game = models.CharField(max_length=255, verbose_name='Jogo')
     bet = models.CharField(null=True, max_length=1000, verbose_name='Caderneta BET365')
-    sent = models.BooleanField(default=False, verbose_name='Enviado?')
     units = models.FloatField(default=1, verbose_name='Unidades')
     link = models.URLField(null=True, verbose_name='Link')
     house = models.CharField(null=True, max_length=100, choices=House.choices, verbose_name='House')
-    sum_odds = models.FloatField(null=True, verbose_name='Soma Odds')
-    create_bet = models.BooleanField(default=False, verbose_name='É criar aposta?')
-    content = models.TextField(null=True)
+    source = models.TextField(null=True, editable=False)
+    print = models.TextField(null=True, editable=False)
 
     class Meta:
         verbose_name = 'Tip'
