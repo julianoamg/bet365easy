@@ -53,9 +53,9 @@ def create_bet365_tips(session, request):
             continue
 
     try:
-        anchor = link.split('#')[1]
+        anchor = '#' + link.split('#')[1]
     except IndexError:
-        ...
+        anchor = ''
 
     message.append(f'https://www.bet365.com/dl/sportsbookredirect?bet=1&bs=' + '|'.join(parts) + anchor)
     message = '\n\n'.join(message)
