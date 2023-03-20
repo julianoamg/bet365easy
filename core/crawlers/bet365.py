@@ -50,6 +50,7 @@ def create_bet365_tips(session, request):
     bet = request.POST.get('betstring')
     innerHTML = request.POST.get('innerHTML')
     link = request.POST.get('href')
+    units = float(request.POST.get('units'))
     message = []
     similar_tips = []
     bot = ModelBot.objects.filter(user=session.user).first()
@@ -88,7 +89,7 @@ def create_bet365_tips(session, request):
                 game=game,
                 bet=bet,
                 link=link,
-                units=float(request.POST.get('units')),
+                units=units,
                 house=Tip.House.BET365,
                 sum_odds=sum_odds,
                 create_bet=True,
@@ -161,7 +162,7 @@ def create_bet365_tips(session, request):
         if (similar_count > 1 or create_bet) and tip.sum_odds:
             message.append(f'📌 *Odd:* {tip.sum_odds}')
 
-    message.append(f'💰 *Unidades:* {tip.units}')
+    message.append(f'💰 *Unidades:* {units}')
 
     if similar_count > 1 or create_bet:
         message.append('')
