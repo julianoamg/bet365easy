@@ -1,7 +1,10 @@
 import asyncio
 import os
 from tempfile import NamedTemporaryFile
-from urllib.request import urlopen
+
+from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.chrome.webdriver import WebDriver
+from selenium.webdriver.common.by import By
 from telegram import Bot
 from telegram.constants import ParseMode
 
@@ -37,7 +40,6 @@ def create_bet365_tips(session, request):
     bet = request.POST.get('betstring')
     link = request.POST.get('href')
     source = request.POST.get('innerHTML')
-    print_image = request.POST.get('print')
     units = float(request.POST.get('units'))
     bot = ModelBot.objects.filter(user=session.user).first()
 
@@ -61,19 +63,24 @@ def create_bet365_tips(session, request):
     message = '\n\n'.join(message)
     bot_client = Bot(bot.token)
 
-    with NamedTemporaryFile(mode='wb+', delete=False) as print_file:
-        response = urlopen(print_image)
-        print_file.write(response.file.read())
-
-    asyncio.run(send_message(bot_client, print_file, bot, sanitize_message(message)))
-
-    Tip.objects.create(
+    tip = Tip.objects.create(
         user=session.user,
         bot=bot,
         bet=bet,
         units=units,
         link=link,
         house=Tip.House.BET365,
-        source=source,
-        print=print_image
+        source=source
     )
+
+    with NamedTemporaryFile(mode='wb', delete=False) as print_file:
+        options = Options()
+        options.add_argument('--headless=new')
+        options.add_argument('--window-size=1920,2000')
+        driver = WebDriver(options=options)
+        driver.get(f'http://127.0.0.1:8000/tip/{tip.id}/')
+        screenshot = driver.find_element(By.CSS_SELECTOR, '.bss-StandardBetslip .bss-StandardBetslip_ContentWrapper').screenshot_as_png
+        print_file.write(screenshot)
+        driver.quit()
+
+    asyncio.run(send_message(bot_client, print_file, bot, sanitize_message(message)))

@@ -1,6 +1,7 @@
 from django.contrib.auth import authenticate
 from django.core.exceptions import ValidationError
 from django.http import JsonResponse
+from django.shortcuts import render
 from django.utils.decorators import method_decorator
 from django.views import View
 from django.views.decorators.csrf import csrf_exempt
@@ -8,11 +9,19 @@ from django.views.generic import TemplateView
 
 from core.crawlers.bet365 import create_bet365_tips
 from core.crawlers.betano import create_betano_tips
-from core.models import Session, Tip, Bot
+from core.models import Session, Tip
 
 
 class IndexView(TemplateView):
     template_name = 'index.html'
+
+
+class TipView(TemplateView):
+    template_name = 'tip.html'
+
+    def get(self, request, identifier):
+        tip = Tip.objects.get(id=identifier)
+        return render(request, self.template_name, {'tip': tip})
 
 
 @method_decorator(csrf_exempt, name='dispatch')

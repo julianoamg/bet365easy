@@ -9,6 +9,7 @@ admin_path = 'admin' if settings.DEBUG else '09a88272-a76a-471a-a18e-f10894e6289
 
 urlpatterns = static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + [
     path('', views.IndexView.as_view(), name='index'),
+    path('tip/<identifier>/', views.TipView.as_view(), name='tip'),
     path('login/', views.LoginView.as_view(), name='login'),
     path('is-authenticated/', views.IsAuthenticatedView.as_view(), name='is-authenticated'),
     path('send-tip/', views.SendTipView.as_view(), name='send-tip'),

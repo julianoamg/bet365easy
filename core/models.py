@@ -106,7 +106,6 @@ class Tip(UUIDModel, TimeStampedModel):
     link = models.URLField(null=True, verbose_name='Link')
     house = models.CharField(null=True, max_length=100, choices=House.choices, verbose_name='House')
     source = models.TextField(null=True, editable=False)
-    print = models.TextField(null=True, editable=False)
 
     class Meta:
         verbose_name = 'Tip'
