@@ -1,7 +1,4 @@
-const BASE_URL = 'http://127.0.0.1:8000'
-
-const scriptHTML2Canvas = document.createElement('script');
-scriptHTML2Canvas.src = 'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js';
+const BASE_URL = 'https://bet365easy.com';
 
 const iframe = document.createElement('iframe');
 iframe.style.display = 'none';
@@ -55,42 +52,6 @@ function createSendTipButton() {
     divButton.id = 'bet365easy-sendtip-button';
     const input = document.createElement('input');
 
-    const checkbox = document.createElement('input')
-    checkbox.type = 'checkbox';
-    checkbox.checked = Boolean(localStorage.bet365easy_print_checkbox);
-    checkbox.addEventListener('change', e => {
-        localStorage.bet365easy_print_checkbox = checkbox.checked;
-    });
-
-    const spanCheckbox = document.createElement('span');
-    spanCheckbox.textContent = 'print caderneta'
-
-    const labelCheckbox = document.createElement('label');
-    labelCheckbox.appendChild(checkbox);
-    labelCheckbox.appendChild(spanCheckbox);
-
-    input.addEventListener('mousedown', e => {
-        e.stopPropagation();
-    });
-
-    const checkboxText = document.createElement('input')
-    checkboxText.type = 'checkbox';
-    checkboxText.checked = Boolean(localStorage.bet365easy_text_checkbox);
-    checkboxText.addEventListener('change', e => {
-        localStorage.bet365easy_text_checkbox = checkboxText.checked;
-    });
-
-    const spanTextCheckbox = document.createElement('span');
-    spanTextCheckbox.textContent = 'texto caderneta'
-
-    const labelTextCheckbox = document.createElement('label');
-    labelTextCheckbox.appendChild(checkboxText);
-    labelTextCheckbox.appendChild(spanTextCheckbox);
-
-    input.addEventListener('mousedown', e => {
-        e.stopPropagation();
-    });
-
     input.placeholder = 'Qtd unidades';
     input.type = 'number';
     input.step = '0.5';
@@ -111,7 +72,7 @@ function createSendTipButton() {
             return;
         }
 
-        const bodyHTML = document.body.innerHTML;
+        const bodyHTML = document.documentElement.innerHTML;
 
         if (bodyHTML.includes('class="bss-StandardBetslip bss-StandardBetslip-hidden')) {
             alert('A caderneta precisa estar aberta para enviar tips.');
@@ -123,37 +84,20 @@ function createSendTipButton() {
 
         const body = new FormData();
         body.append('href', location.href);
-        if (checkboxText.checked) {
-            body.append('innerHTML', document.body.innerHTML);
-        }
+        body.append('innerHTML', iframe.contentDocument.querySelector.call(document, '.bss-StandardBetslip').outerHTML);
         body.append('betstring', sessionStorage.betstring);
         body.append('units', input.value);
 
-        const header = iframe.contentDocument.querySelector.call(document, '.bss-StandardBetslip .bsc-BetCreditsHeader');
-        if (header) {
-            header.style.display = 'none';
-        }
-        html2canvas(iframe.contentDocument.querySelector.call(document, '.bss-StandardBetslip .bss-StandardBetslip_ContentWrapper')).then(canvas => {
-            if (checkbox.checked) {
-                body.append('print', canvas.toDataURL());
+        fetch(BASE_URL + '/send-tip/?session_id=' + localStorage.bet365easy_sessionid, {
+            method: 'POST',
+            body: body
+        }).then(r => r.json()).then(data => {
+            if (data.success) {
+                alert('Tip enviada com sucesso!');
             }
-
-            fetch(BASE_URL + '/send-tip/?session_id=' + localStorage.bet365easy_sessionid, {
-                method: 'POST',
-                body: body
-            }).then(r => r.json()).then(data => {
-                if (data.success) {
-                    alert('Tip enviada com sucesso!');
-                }
-                if (data.error) {
-                    alert(data.error);
-                }
-                if (header) {
-                    header.style.display = 'block';
-                }
-                button.disabled = false;
-            });
-
+            if (data.error) {
+                alert(data.error);
+            }
             button.disabled = false;
         });
 
@@ -163,10 +107,7 @@ function createSendTipButton() {
     });
 
     document.body.appendChild(iframe);
-    document.body.appendChild(scriptHTML2Canvas);
     divButton.appendChild(input);
-    divButton.appendChild(labelCheckbox)
-    divButton.appendChild(labelTextCheckbox)
     divButton.appendChild(button);
     document.body.append(divButton);
 }
