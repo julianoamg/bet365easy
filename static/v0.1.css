@@ -106,16 +106,21 @@
     text-decoration: none;
     text-shadow: 0px 1px 0px #078D72;
     max-width: 150px;
-    height: 65px;
+    height: 100px;
 }
 
-#bet365easy-sendtip-button input {
+#bet365easy-sendtip-button input[type="number"] {
     width: 100%;
     padding: 3px;
     text-align: center;
     box-sizing: border-box;
     border-radius: 3px;
     border: 0;
+}
+
+#bet365easy-sendtip-button label span {
+    font-size: 12px;
+    text-transform: uppercase;
 }
 
 #bet365easy-sendtip-button button {

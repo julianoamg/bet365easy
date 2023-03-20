@@ -25,7 +25,8 @@ class LoginView(View):
         if user is None:
             return JsonResponse(error_response)
         if user.expire_in_days <= 0:
-            return JsonResponse({'error': 'Seu plano expirou, por favor entre em contato com nosso suporte, e faça sua renovação.'})
+            return JsonResponse(
+                {'error': 'Seu plano expirou, por favor entre em contato com nosso suporte, e faça sua renovação.'})
         Session.objects.filter(user=user).delete()
         session = Session.objects.create(user=user)
         return JsonResponse({'success': True, 'session_id': session.id})
@@ -47,19 +48,16 @@ class IsAuthenticatedView(View):
 @method_decorator(csrf_exempt, name='dispatch')
 class SendTipView(View):
     def post(self, request):
-        try:
-            session = Session.objects.get(id=request.GET.get('session_id'))
-            href = request.POST.get('href')
-            response = None
+        session = Session.objects.get(id=request.GET.get('session_id'))
+        href = request.POST.get('href')
+        response = None
 
-            if 'bet365.com' in href:
-                response = create_bet365_tips(session, request)
-            if 'betano.com' in href:
-                response = create_betano_tips(session, request)
+        if 'bet365.com' in href:
+            response = create_bet365_tips(session, request)
+        if 'betano.com' in href:
+            response = create_betano_tips(session, request)
 
-            if response:
-                return response
+        if response:
+            return response
 
-            return JsonResponse({'success': True})
-        except (Session.DoesNotExist, ValidationError, TypeError):
-            return JsonResponse({'error': 'Erro! Avise nosso suporte imediatamente.'})
+        return JsonResponse({'success': True})
