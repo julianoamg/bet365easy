@@ -54,6 +54,7 @@ def create_bet365_tips(session, request):
     similar_tips = []
     bot = ModelBot.objects.filter(user=session.user).first()
     create_bet = 'class="bss-BetBuilderBetItem' in innerHTML if innerHTML else False
+    similar_count = 1
 
     if innerHTML:
         parser = HTMLParser(innerHTML)
@@ -160,10 +161,10 @@ def create_bet365_tips(session, request):
         if (similar_count > 1 or create_bet) and tip.sum_odds:
             message.append(f'📌 *Odd:* {tip.sum_odds}')
 
-        message.append(f'💰 *Unidades:* {tip.units}')
+    message.append(f'💰 *Unidades:* {tip.units}')
 
-        if similar_count > 1 or create_bet:
-            message.append('')
+    if similar_count > 1 or create_bet:
+        message.append('')
 
     parts = []
 
