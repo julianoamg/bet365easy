@@ -15,7 +15,7 @@ async def send_message(bot_client, print_file, bot, message):
     await bot_client.send_photo(
         bot.dialog_id,
         photo=open(print_file.name, 'rb'),
-        protect_content=True,
+        # protect_content=True,
         caption=message,
         parse_mode=ParseMode.MARKDOWN
     )
