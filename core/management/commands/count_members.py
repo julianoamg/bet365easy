@@ -1,5 +1,6 @@
 import asyncio
 
+import telegram
 from asgiref.sync import sync_to_async
 from django.core.management import BaseCommand
 from telegram import Bot as PyBot
@@ -25,4 +26,7 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         for bot in Bot.objects.all():
-            asyncio.run(count_members(bot))
+            try:
+                asyncio.run(count_members(bot))
+            except telegram.error.BadRequest:
+                continue
