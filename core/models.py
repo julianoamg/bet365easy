@@ -77,6 +77,14 @@ class Bot(UUIDModel, TimeStampedModel):
     dialog_id = models.BigIntegerField(verbose_name='ID do Grupo/Canal')
     dialog_name = models.CharField(max_length=255, verbose_name='Nome do Grupo/Canal')
     members_qty = models.IntegerField(default=0, editable=False, verbose_name='Quantidade de membros')
+    has_image = models.BooleanField(default=True, verbose_name='Habilitar imagem?')
+    has_text = models.BooleanField(default=False, verbose_name='Habilitar Texto?')
+    has_watermark = models.BooleanField(default=False, verbose_name='Habilitar marca da água?')
+    watermark_text = models.CharField(max_length=100, default='@BET365EASY', verbose_name='Texto marca da água')
+    watermark_red = models.IntegerField(default=0, verbose_name='RED marca da água')
+    watermark_green = models.IntegerField(default=0, verbose_name='GREEN marca da água')
+    watermark_blue = models.IntegerField(default=0, verbose_name='BLUE marca da água')
+    watermark_alpha = models.IntegerField(default=50, verbose_name='ALPHA marca da água')
 
     def __str__(self):
         return self.dialog_name

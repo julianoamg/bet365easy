@@ -9,6 +9,27 @@ from telegram import Bot
 from telegram.constants import ParseMode
 
 from core.models import Bot as ModelBot, Tip
+from PIL import Image, ImageDraw, ImageFont
+
+
+def place_watermark(bot, filename):
+    with Image.open(filename).convert("RGBA") as base:
+        txt = Image.new("RGBA", base.size, (255, 255, 255, 0))
+        fnt = ImageFont.truetype("static/Roboto-Black.ttf", 80 - int(len(bot.watermark_text) * 2.4))
+        d = ImageDraw.Draw(txt)
+        text_width, text_height = d.textsize(bot.watermark_text, fnt)
+        width, height = base.size
+        x = width / 2 - text_width / 2
+        diff = (height - text_height)
+        y = (height - text_height) - (diff / 2)
+        d.text((x, y), bot.watermark_text, font=fnt, fill=(
+            bot.watermark_red,
+            bot.watermark_green,
+            bot.watermark_blue,
+            bot.watermark_alpha
+        ))
+        out = Image.alpha_composite(base, txt)
+        out.save(filename, 'png')
 
 
 async def send_message(bot_client, print_file, bot, message):
@@ -73,6 +94,9 @@ def create_bet365_tips(session, request):
         source=source
     )
 
+    if not bot.has_image:
+        return
+
     with NamedTemporaryFile(mode='wb', delete=False) as print_file:
         options = Options()
         options.add_argument('--headless=new')
@@ -82,5 +106,8 @@ def create_bet365_tips(session, request):
         screenshot = driver.find_element(By.CSS_SELECTOR, '.bss-StandardBetslip .bss-StandardBetslip_ContentWrapper').screenshot_as_png
         print_file.write(screenshot)
         driver.quit()
+
+    if bot.has_watermark:
+        place_watermark(bot, print_file.name)
 
     asyncio.run(send_message(bot_client, print_file, bot, sanitize_message(message)))
