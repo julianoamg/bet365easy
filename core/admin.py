@@ -95,8 +95,8 @@ class TipAdmin(admin.ModelAdmin):
         'house'
     ]
     search_fields = [
-        'user__user__email',
-        'user__user__name',
+        'user__email',
+        'user__name',
     ]
 
     def has_add_permission(self, request):
