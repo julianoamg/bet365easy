@@ -28,6 +28,8 @@ class UserAdmin(UserAdmin):
         'email',
         'plan',
         'payment_date',
+        'telegram',
+        'whatsapp',
         'price',
         'get_plan_expiry_date',
         'is_staff',
