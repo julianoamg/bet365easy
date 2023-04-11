@@ -26,6 +26,7 @@ class UserAdmin(UserAdmin):
     )
     list_display = [
         'email',
+        'name',
         'plan',
         'payment_date',
         'telegram',
