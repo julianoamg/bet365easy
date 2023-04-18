@@ -64,7 +64,7 @@ def create_bet365_tips(session, request):
     units = float(request.POST.get('units'))
     bot = ModelBot.objects.filter(user=session.user).first()
 
-    message = [f'💰 *Unidades:* {units}']
+    message = [f'💰 *{bot.unit_text}:* {units}']
     parts = []
 
     for bet_string in bet.strip('||').split('||'):

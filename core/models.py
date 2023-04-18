@@ -85,6 +85,7 @@ class Bot(UUIDModel, TimeStampedModel):
     watermark_green = models.IntegerField(default=0, verbose_name='GREEN marca da água')
     watermark_blue = models.IntegerField(default=0, verbose_name='BLUE marca da água')
     watermark_alpha = models.IntegerField(default=50, verbose_name='ALPHA marca da água')
+    unit_text = models.CharField(max_length=100, default='Unidades', verbose_name='Texto das unidades:')
 
     def __str__(self):
         return self.dialog_name
