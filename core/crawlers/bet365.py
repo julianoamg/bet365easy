@@ -80,7 +80,7 @@ def create_bet365_tips(session, request):
     except IndexError:
         anchor = ''
 
-    message.append(f'https://www.bet365.com/dl/sportsbookredirect?bet=1&bs=' + '|'.join(parts) + anchor)
+    message.append(f'https://www.bet365.com/dl/?bet=1&bs=' + '|'.join(parts) + anchor)
     message = '\n\n'.join(message)
     bot_client = Bot(bot.token)
 
