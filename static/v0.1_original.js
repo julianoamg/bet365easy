@@ -1,4 +1,4 @@
-const BASE_URL = 'https://bet365easy.hackersinais.com';
+const BASE_URL = 'http://bot.jacobtips.com';
 
 const iframe = document.createElement('iframe');
 iframe.style.display = 'none';
