@@ -1,4 +1,4 @@
-const BASE_URL = 'http://bot.jacobtips.com';
+const BASE_URL = 'https://bot.jacobtips.com';
 
 const iframe = document.createElement('iframe');
 iframe.style.display = 'none';
